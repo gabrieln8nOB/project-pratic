@@ -21,9 +21,10 @@ jobs:
       - name: Build and Push Image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./emailTeste
+          file: ./emailTeste/Dockerfile
           push: true
-          tags: emailteste:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/emailteste:latest
 
       - name: Deploy on VPS
         uses: appleboy/ssh-action@v1.0.3
@@ -33,5 +34,5 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /opt/emailteste || exit 1
-            docker pull emailteste:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/emailteste:latest
             docker compose up -d
