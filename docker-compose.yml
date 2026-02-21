@@ -4,7 +4,7 @@ services:
   emailteste:
     build:
       context: ./emailTeste
-      dockerfile: dockerfile
+      dockerfile: Dockerfile
     image: emailteste:latest
     container_name: emailteste-api
     ports:
