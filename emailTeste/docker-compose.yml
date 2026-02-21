@@ -3,7 +3,7 @@ version: "3.9"
 services:
   emailteste:
     build:
-      context: ./emailTeste
+      context: .
       dockerfile: Dockerfile
     image: emailteste:latest
     container_name: emailteste-api
