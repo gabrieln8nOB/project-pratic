@@ -3,9 +3,9 @@ version: "3.9"
 services:
   emailteste:
     build:
-      context: .
+      context: /
       dockerfile: Dockerfile
-    image: gabrieloliveirabarbosa/emailteste:latest
+    image: emailteste:latest
     container_name: emailteste-api
     ports:
       - "8080:8080"

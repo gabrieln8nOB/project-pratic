@@ -1,38 +1,39 @@
-name: Deploy to VPS
+name: Deploy Docker Image
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master", "main" ]
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Login Docker Hub
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker registry
         uses: docker/login-action@v3
         with:
+          registry: ${{ secrets.DOCKER_REGISTRY_URL }} # ex: docker.io ou ghcr.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Image
-        uses: docker/build-push-action@v5
+      - name: Build and push image
+        uses: docker/build-push-action@v6
         with:
           context: ./emailTeste
           file: ./emailTeste/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/emailteste:latest
+          tags: |
+            ${{ secrets.DOCKER_REGISTRY_URL }}/${{ secrets.DOCKER_USERNAME }}/emailteste:latest
 
-      - name: Deploy on VPS
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Deploy to Hostinger
+        uses: hostinger/deploy-on-vps@v2
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            cd /opt/emailteste || exit 1
-            docker pull ${{ secrets.DOCKER_USERNAME }}/emailteste:latest
-            docker compose up -d
+          api-key: ${{ secrets.HOSTINGER_API_KEY }}
+          virtual-machine: ${{ vars.HOSTINGER_VM_ID }}
+    
