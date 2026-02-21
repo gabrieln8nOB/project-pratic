@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: emailteste:latest
+    image: gabrieloliveirabarbosa/emailteste:latest
     container_name: emailteste-api
     ports:
       - "8080:8080"
