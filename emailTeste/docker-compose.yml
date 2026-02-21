@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  emailteste:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: emailteste:latest
+    container_name: emailteste-api
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_URLS: http://+:8080
