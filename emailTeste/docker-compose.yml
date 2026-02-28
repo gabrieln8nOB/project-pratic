@@ -10,6 +10,7 @@ services:
       ASPNETCORE_URLS: http://+:8080
     networks:
       - app-network
+
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -18,11 +19,12 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx:/etc/nginx
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf  # ✅ só o arquivo de rota
     depends_on:
       - emailteste
     networks:
       - app-network
+
 networks:
   app-network:
     driver: bridge
